@@ -51,7 +51,7 @@ def manage_new_files(src):
 		trace_failed(src)
 
 
-if __name__ == "__main__":		
+def main():
 	first_occurence = True
 	while True:
 		logging.debug("###############################")
@@ -99,5 +99,7 @@ if __name__ == "__main__":
 		first_occurence = False
 		time.sleep(30)
 
-	input('Press ENTER to exit')
+	#input('Press ENTER to exit')
 
+if __name__ == "__main__":		
+	main()

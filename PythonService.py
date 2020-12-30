@@ -1,6 +1,6 @@
 # ZPF
 # encoding=utf-8
-import win32timezone
+
 from logging.handlers import TimedRotatingFileHandler
 import win32serviceutil
 import win32service
@@ -10,18 +10,18 @@ import logging
 import inspect
 import time
 import shutil
- 
+import watcher
  
 class PythonService(win32serviceutil.ServiceFramework):
     _svc_name_ = "watcher" # call watcher.py
-    _svc_display_name_ = "WatcherServicePython" #jobName displayed on windows services
-    _svc_description_ = "Watch direcotry and copy files" #Description of job
+    _svc_display_name_ = "WatcherServicePython20201230" #jobName displayed on windows services
+    _svc_description_ = "Watch directory and copy files" #Description of job
  
     def __init__(self, args):
         win32serviceutil.ServiceFramework.__init__(self, args)
         self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
         self.logger = self._getLogger()
-        self.path = 'D:\\tmp\log'
+        self.path = 'D:\\tmp\\test'
         self.T = time.time()
         self.run = True
  
@@ -35,7 +35,6 @@ class PythonService(win32serviceutil.ServiceFramework):
         else:
             os.mkdir('%s\\log'%dirpath)
         dir = '%s\\log' % dirpath
- 
         handler = TimedRotatingFileHandler(os.path.join(dir, "watcher.log"),when="midnight",interval=1,backupCount=20)
         formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
         handler.setFormatter(formatter)
@@ -49,9 +48,8 @@ class PythonService(win32serviceutil.ServiceFramework):
         try:
             while self.run:
                 self.logger.info('---Begin---')
+                watcher.main()
                 self.logger.info('---End---')
-                time.sleep(10)
- 
         except Exception as e:
             self.logger.info(e)
             time.sleep(60)
